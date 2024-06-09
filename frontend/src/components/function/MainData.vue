@@ -839,8 +839,8 @@ export default {
 
 .highlighted-results {
   position: absolute;
-  bottom: -40px;
-  right: 60px;
+  bottom: 0px;
+  right: 10%;
   max-height: 250px;
   overflow-y: auto; /* 超出内容显示滚动条 */
   background-color: #001529; /* 深蓝色背景 */
@@ -854,8 +854,8 @@ export default {
 
 .form-container {
   position: absolute;
-  bottom: -40px;
-  right: 460px;
+  bottom: 0px;
+  right: 0px;
   background-color: #001529; /* 深蓝色背景 */
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 添加阴影 */

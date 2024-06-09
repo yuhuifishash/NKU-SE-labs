@@ -1,134 +1,133 @@
 <template>
-    <div id="underwater-system">
-      <header>
-        <h1>水下系统</h1>
-      </header>
-      <section class="mainbox">
-        <!-- 鱼群数量 环境得分 历史数据 -->
-        <div class="column">
-          <div class="fish-num block">
-            <h2>鱼群数量</h2>
-            <p>总量：<span>1111</span></p>
-            <p>今日新增：<span>1</span></p>
-            <p>今日死亡：<span>100</span></p>
-          </div>
-          <div class="envir-score block">
-            <h2>海洋牧场环境感知得分</h2>
-            <div id="score-chart"></div>
-          </div>
-          <div class="history block">
-            <h2>鱼群个体数量历史曲线</h2>
-            <div id="history-chart"></div>
-          </div>
+  <div id="underwater-system">
+    <header>
+      <h1>水下系统</h1>
+    </header>
+    <section class="mainbox">
+      <!-- 鱼群数量 环境得分 历史数据 -->
+      <div class="column">
+        <div class="fish-num block">
+          <h2>鱼群数量</h2>
+          <p>总量：<span>{{ fishTotal }}</span></p>
+          <p>今日新增：<span>{{ fishAddedToday }}</span></p>
+          <p>今日死亡：<span>{{ fishDiedToday }}</span></p>
         </div>
-        <!-- 总信息 鱼群属性分布 -->
-        <div class="column">
-          <div class="total-data">
-            <div class="total-data-show">
-              <div class="total-data-show1">
-                <div class="show1-up">
+        <div class="envir-score block">
+          <h2>海洋牧场环境感知得分</h2>
+          <div id="score-chart"></div>
+        </div>
+        <div class="history block">
+          <h2>鱼群个体数量历史曲线</h2>
+          <div id="history-chart"></div>
+        </div>
+      </div>
+      <!-- 总信息 鱼群属性分布 -->
+      <div class="column">
+        <div class="total-data">
+          <div class="total-data-show">
+            <div class="total-data-show1">
+              <div class="show1-up">
+                <div class="data-block">
+                  <p>鱼种</p>
+                  <p>{{ fishSpeciesCount }}+</p>
+                </div>
+              </div>
+              <div class="show1-down">
+                <div class="show1-down1">
                   <div class="data-block">
-                    <p>鱼种</p>
-                    <p>50+</p>
+                    <p>鱼苗</p>
+                    <p>{{ fishFryCount }}尾</p>
                   </div>
                 </div>
-                <div class="show1-down">
-                  <div class="show1-down1">
-                    <div class="data-block">
-                      <p>鱼苗</p>
-                      <p>500尾</p>
-                    </div>
-                  </div>
-                  <div class="show1-down2">
-                    <div class="data-block">
-                      <p>生长</p>
-                      <p>600尾</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="total-data-show2" id="total-data-show2">
-              </div>
-              <div class="total-data-show3">
-                <div class="show3-up">
+                <div class="show1-down2">
                   <div class="data-block">
-                    <p>鱼种</p>
-                    <p>50+</p>
-                  </div>
-                </div>
-                <div class="show3-down">
-                  <div class="show3-down1">
-                    <div class="data-block">
-                      <p>鱼苗</p>
-                      <p>500尾</p>
-                    </div>
-                  </div>
-                  <div class="show3-down2">
-                    <div class="data-block">
-                      <p>生长</p>
-                      <p>600尾</p>
-                    </div>
+                    <p>生长</p>
+                    <p>{{ growingFishCount }}尾</p>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="total-data-number">
-              <div class="data-block">
-                <p>已保障养殖鱼群</p>
-                <p>35000尾</p>
+            <div class="total-data-show2" id="total-data-show2"></div>
+            <div class="total-data-show3">
+              <div class="show3-up">
+                <div class="data-block">
+                  <p>鱼种</p>
+                  <p>{{ fishSpeciesCount }}+</p>
+                </div>
+              </div>
+              <div class="show3-down">
+                <div class="show3-down1">
+                  <div class="data-block">
+                    <p>鱼苗</p>
+                    <p>{{ fishFryCount }}尾</p>
+                  </div>
+                </div>
+                <div class="show3-down2">
+                  <div class="data-block">
+                    <p>生长</p>
+                    <p>{{ growingFishCount }}尾</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-          <div class="attr-distri block">
-            <h2>鱼群属性分布曲线</h2>
-            <div class="attr-distri-up">
-              <div class="attr-distri-chart">
-                <div id="attr-distri-chart"></div>
-              </div>
-              <div class="attr-distri-chose">
-                <ul class="guidebar">
-                  <li>鱼重量</li>
-                  <li>鱼尺寸</li>
-                  <li>鱼生命</li>
-                </ul>
-              </div>
-            </div>
-            <div class="attr-distri-down">
-              <ul class="guidebar2">
-                  <li>鱼类A</li>
-                  <li>鱼类B</li>
-                  <li>鱼类C</li>
-                  <li>鱼类D</li>
-                  <li>鱼类E</li>
-                  <li>鱼类F</li>
-                </ul>
+          <div class="total-data-number">
+            <div class="data-block">
+              <p>已保障养殖鱼群</p>
+              <p>{{ securedFishCount }}尾</p>
             </div>
           </div>
         </div>
-        <!-- 网箱信息 水底传感器 鱼群种类占比 -->
-        <div class="column">
-          <div class="net-data block">
-            <h2>网箱信息</h2>
-            <p>网箱长度：<span>100</span>m</p>
-            <p>网箱宽度：<span>100</span>m</p>
-            <p>网箱深度：<span>100</span>m</p>
-            <p>网箱经度：<span>100</span></p>
-            <p>网箱纬度：<span>100</span></p>
+        <div class="attr-distri block">
+          <h2>鱼群属性分布曲线</h2>
+          <div class="attr-distri-up">
+            <div class="attr-distri-chart">
+              <div id="attr-distri-chart"></div>
+            </div>
+            <div class="attr-distri-chose">
+              <ul class="guidebar">
+                <li>鱼重量</li>
+                <li>鱼尺寸</li>
+                <li>鱼生命</li>
+              </ul>
+            </div>
           </div>
-          <div class="sensor block">
-            <h2>水底传感器</h2>
-            <p>运行时间：<span>100</span>h</p>
-            <p>下次检修：<span>25</span>天后</p>
-            <p>保修过期：<span></span></p>
-          </div>
-          <div class="type block">
-            <h2>鱼群种类占比</h2>
-            <div id="type-chart"></div>
+          <div class="attr-distri-down">
+            <ul class="guidebar2">
+              <li>鱼类A</li>
+              <li>鱼类B</li>
+              <li>鱼类C</li>
+              <li>鱼类D</li>
+              <li>鱼类E</li>
+              <li>鱼类F</li>
+            </ul>
           </div>
         </div>
-      </section>
-    </div>
-  </template>
+      </div>
+      <!-- 网箱信息 水底传感器 鱼群种类占比 -->
+      <div class="column">
+        <div class="net-data block">
+          <h2>网箱信息</h2>
+          <p>网箱长度：<span>{{ netLength }}</span>m</p>
+          <p>网箱宽度：<span>{{ netWidth }}</span>m</p>
+          <p>网箱深度：<span>{{ netDepth }}</span>m</p>
+          <p>网箱经度：<span>{{ netLongitude }}</span></p>
+          <p>网箱纬度：<span>{{ netLatitude }}</span></p>
+        </div>
+        <div class="sensor block">
+          <h2>水底传感器</h2>
+          <p>运行时间：<span>{{ sensorRuntime }}</span>h</p>
+          <p>下次检修：<span>{{ sensorNextCheck }}</span>天后</p>
+          <p>保修过期：<span>{{ sensorWarrantyExpired }}</span></p>
+        </div>
+        <div class="type block">
+          <h2>鱼群种类占比</h2>
+          <div id="type-chart"></div>
+        </div>
+      </div>
+    </section>
+  </div>
+</template>
 
 <script>
 import * as echarts from 'echarts'
@@ -137,10 +136,30 @@ export default {
   name: 'UnderwaterSystem',
   data () {
     return {
+      fishTotal: this.getRandomInt(1000, 2000),
+      fishAddedToday: this.getRandomInt(0, 100),
+      fishDiedToday: this.getRandomInt(0, 100),
+      fishSpeciesCount: this.getRandomInt(30, 60),
+      fishFryCount: this.getRandomInt(300, 700),
+      growingFishCount: this.getRandomInt(500, 1000),
+      securedFishCount: this.getRandomInt(30000, 40000),
+      netLength: this.getRandomInt(50, 150),
+      netWidth: this.getRandomInt(50, 150),
+      netDepth: this.getRandomInt(50, 150),
+      netLongitude: this.getRandomInt(50, 150),
+      netLatitude: this.getRandomInt(50, 150),
+      sensorRuntime: this.getRandomInt(50, 150),
+      sensorNextCheck: this.getRandomInt(10, 50),
+      sensorWarrantyExpired: this.getRandomInt(0, 365),
       fishcntResults: []
     }
   },
   methods: {
+    getRandomInt (min, max) {
+      min = Math.ceil(min)
+      max = Math.floor(max)
+      return Math.floor(Math.random() * (max - min + 1)) + min // 含min，含max
+    },
     async searchData (startDateI, endDateI) {
       console.log(startDateI, endDateI)
       try {
@@ -155,18 +174,19 @@ export default {
         console.log('Error fetching data:', error)
         alert('查询出错，请查看控制台了解详情')
       }
+    },
+    loadChart (id, option) {
+      const chart = echarts.init(document.getElementById(id))
+      chart.setOption(option)
+    },
+    generateRandomData (length, min, max) {
+      return Array.from({ length }, () => this.getRandomInt(min, max))
     }
   },
-  // 组件的其他代码...
   mounted () {
-    // this.searchData(new Date(2020, 1, 1), new Date(2020, 3, 1))
-    var scoreChart = echarts.init(document.getElementById('score-chart'))
-    var historyChart = echarts.init(document.getElementById('history-chart'))
-    var totalDataChart = echarts.init(document.getElementById('total-data-show2'))
-    var attrChart = echarts.init(document.getElementById('attr-distri-chart'))
-    var typeChart = echarts.init(document.getElementById('type-chart'))
+    this.searchData(new Date(2020, 1, 1), new Date(2020, 3, 1))
 
-    var optionScoreChart = {
+    this.loadChart('score-chart', {
       series: [
         {
           type: 'gauge',
@@ -244,13 +264,14 @@ export default {
           },
           data: [
             {
-              value: 0.7
+              value: Math.random()
             }
           ]
         }
       ]
-    }
-    var optionHistoryChart = {
+    })
+
+    this.loadChart('history-chart', {
       grid: {
         left: '0%',
         right: '10%',
@@ -266,13 +287,14 @@ export default {
       },
       series: [
         {
-          data: [820, 932, 901, 934, 1290, 1330, 1320],
+          data: this.generateRandomData(7, 800, 1400),
           type: 'line',
           smooth: true
         }
       ]
-    }
-    var optionTotalDataChart = {
+    })
+
+    this.loadChart('total-data-show2', {
       series: [
         {
           type: 'gauge',
@@ -323,13 +345,14 @@ export default {
           },
           data: [
             {
-              value: 15000000
+              value: this.getRandomInt(5000000, 15000000)
             }
           ]
         }
       ]
-    }
-    var optionAttrChart = {
+    })
+
+    this.loadChart('attr-distri-chart', {
       xAxis: {
         type: 'category',
         data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
@@ -339,13 +362,14 @@ export default {
       },
       series: [
         {
-          data: [820, 932, 901, 934, 1290, 1330, 1320],
+          data: this.generateRandomData(7, 800, 1400),
           type: 'line',
           smooth: true
         }
       ]
-    }
-    var optionTypeChart = {
+    })
+
+    this.loadChart('type-chart', {
       tooltip: {
         trigger: 'item'
       },
@@ -370,20 +394,16 @@ export default {
             show: false
           },
           data: [
-            { value: 1048, name: '鲤鱼' },
-            { value: 735, name: '鲫鱼' },
-            { value: 580, name: '巴沙鱼' },
-            { value: 484, name: '草鱼' },
-            { value: 300, name: '其他' }
+            { value: this.getRandomInt(500, 1500), name: '鲤鱼' },
+            { value: this.getRandomInt(500, 1500), name: '鲫鱼' },
+            { value: this.getRandomInt(500, 1500), name: '巴沙鱼' },
+            { value: this.getRandomInt(500, 1500), name: '草鱼' },
+            { value: this.getRandomInt(500, 1500), name: '其他' }
           ]
         }
       ]
-    }
-    scoreChart.setOption(optionScoreChart)
-    historyChart.setOption(optionHistoryChart)
-    totalDataChart.setOption(optionTotalDataChart)
-    attrChart.setOption(optionAttrChart)
-    typeChart.setOption(optionTypeChart)
+    })
+
     this.loadExternalScript('js/flexible.js')
   }
 }
