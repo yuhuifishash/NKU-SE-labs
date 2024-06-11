@@ -19,6 +19,13 @@
         <div class="history block">
           <h2>鱼群个体数量历史曲线</h2>
           <div id="history-chart"></div>
+          <div class="date-inputs">
+            <label for="startDate"></label>
+            <input type="date" id="startDate" v-model="startDate">
+            <label for="endDate"></label>
+            <input type="date" id="endDate" v-model="endDate">
+            <button @click="searchData(startDate, endDate)">查询</button>
+          </div>
         </div>
       </div>
       <!-- 总信息 鱼群属性分布 -->
@@ -151,7 +158,9 @@ export default {
       sensorRuntime: this.getRandomInt(50, 150),
       sensorNextCheck: this.getRandomInt(10, 50),
       sensorWarrantyExpired: this.getRandomInt(0, 365),
-      fishcntResults: []
+      fishcntResults: [],
+      startDate: '',
+      endDate: ''
     }
   },
   methods: {
@@ -162,6 +171,241 @@ export default {
     },
     async searchData (startDateI, endDateI) {
       console.log(startDateI, endDateI)
+
+      this.fishTotal = this.getRandomInt(1000, 2000)
+      this.fishAddedToday = this.getRandomInt(0, 100)
+      this.fishDiedToday = this.getRandomInt(0, 100)
+      this.fishSpeciesCount = this.getRandomInt(30, 60)
+      this.fishFryCount = this.getRandomInt(300, 700)
+      this.growingFishCount = this.getRandomInt(500, 1000)
+      this.securedFishCount = this.getRandomInt(30000, 40000)
+      this.netLength = this.getRandomInt(50, 150)
+      this.netWidth = this.getRandomInt(50, 150)
+      this.netDepth = this.getRandomInt(50, 150)
+      this.netLongitude = this.getRandomInt(50, 150)
+      this.netLatitude = this.getRandomInt(50, 150)
+      this.sensorRuntime = this.getRandomInt(50, 150)
+      this.sensorNextCheck = this.getRandomInt(10, 50)
+      this.sensorWarrantyExpired = this.getRandomInt(0, 365)
+
+      this.loadChart('score-chart', {
+        series: [
+          {
+            type: 'gauge',
+            startAngle: 180,
+            endAngle: 0,
+            center: ['50%', '75%'],
+            radius: '90%',
+            min: 0,
+            max: 1,
+            splitNumber: 8,
+            axisLine: {
+              lineStyle: {
+                width: 4,
+                color: [
+                  [0.25, '#FF6E76'],
+                  [0.5, '#FDDD60'],
+                  [0.75, '#58D9F9'],
+                  [1, '#7CFFB2']
+                ]
+              }
+            },
+            pointer: {
+              icon: 'path://M12.8,0.7l12,40.1H0.7L12.8,0.7z',
+              length: '12%',
+              width: 10,
+              offsetCenter: [0, '-60%'],
+              itemStyle: {
+                color: 'auto'
+              }
+            },
+            axisTick: {
+              length: 12,
+              lineStyle: {
+                color: 'auto',
+                width: 1
+              }
+            },
+            splitLine: {
+              length: 10,
+              lineStyle: {
+                color: 'auto',
+                width: 3
+              }
+            },
+            axisLabel: {
+              color: '#fff',
+              fontSize: 12,
+              distance: -40,
+              rotate: 'tangential',
+              formatter: function (value) {
+                if (value === 0.875) {
+                  return '舒适'
+                } else if (value === 0.625) {
+                  return '正常'
+                } else if (value === 0.375) {
+                  return '隐患'
+                } else if (value === 0.125) {
+                  return '危险'
+                }
+                return ''
+              }
+            },
+            title: {
+              offsetCenter: [0, '-10%'],
+              fontSize: 20
+            },
+            detail: {
+              fontSize: 20,
+              offsetCenter: [0, '-15%'],
+              valueAnimation: true,
+              formatter: function (value) {
+                return Math.round(value * 100) + ''
+              },
+              color: 'inherit'
+            },
+            data: [
+              {
+                value: Math.random()
+              }
+            ]
+          }
+        ]
+      })
+
+      this.loadChart('history-chart', {
+        grid: {
+          left: '0%',
+          right: '10%',
+          bottom: '10%',
+          containLabel: true
+        },
+        xAxis: {
+          type: 'category',
+          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        },
+        yAxis: {
+          type: 'value'
+        },
+        series: [
+          {
+            data: this.generateRandomData(7, 800, 1400),
+            type: 'line',
+            smooth: true
+          }
+        ]
+      })
+
+      this.loadChart('total-data-show2', {
+        series: [
+          {
+            type: 'gauge',
+            max: 100000000,
+            splitNumber: 6,
+            axisLine: {
+              lineStyle: {
+                width: 10,
+                color: [
+                  [0.3, '#67e0e3'],
+                  [0.7, '#37a2da'],
+                  [1, '#fd666d']
+                ]
+              }
+            },
+            pointer: {
+              itemStyle: {
+                color: 'auto'
+              }
+            },
+            axisTick: {
+              distance: -0,
+              length: 8,
+              lineStyle: {
+                color: '#fff',
+                width: 2
+              }
+            },
+            splitLine: {
+              distance: -0,
+              length: 10,
+              lineStyle: {
+                color: '#fff',
+                width: 4
+              }
+            },
+            axisLabel: {
+              color: 'inherit',
+              distance: 10,
+              fontSize: 0
+            },
+            detail: {
+              valueAnimation: true,
+              fontSize: 20,
+              offsetCenter: [0, '65%'],
+              formatter: '{value}',
+              color: 'inherit'
+            },
+            data: [
+              {
+                value: this.getRandomInt(5000000, 15000000)
+              }
+            ]
+          }
+        ]
+      })
+
+      this.loadChart('attr-distri-chart', {
+        xAxis: {
+          type: 'category',
+          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        },
+        yAxis: {
+          type: 'value'
+        },
+        series: [
+          {
+            data: this.generateRandomData(7, 800, 1400),
+            type: 'line',
+            smooth: true
+          }
+        ]
+      })
+
+      this.loadChart('type-chart', {
+        tooltip: {
+          trigger: 'item'
+        },
+        series: [
+          {
+            name: 'Access From',
+            type: 'pie',
+            radius: ['40%', '70%'],
+            avoidLabelOverlap: false,
+            label: {
+              show: false,
+              position: 'center'
+            },
+            emphasis: {
+              label: {
+                show: true,
+                fontSize: 10,
+                fontWeight: 'bold'
+              }
+            },
+            labelLine: {
+              show: false
+            },
+            data: [
+              { value: this.getRandomInt(500, 1500), name: '鲤鱼' },
+              { value: this.getRandomInt(500, 1500), name: '鲫鱼' },
+              { value: this.getRandomInt(500, 1500), name: '巴沙鱼' },
+              { value: this.getRandomInt(500, 1500), name: '草鱼' },
+              { value: this.getRandomInt(500, 1500), name: '其他' }
+            ]
+          }
+        ]
+      })
+
       try {
         const response = await axios.post('http://localhost:3000/fishcountdata_get', {
           startDate: startDateI,
@@ -475,6 +719,18 @@ export default {
   }
   .history {
     height: 39%;
+  }
+  .date-inputs {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+  }
+  .date-inputs label {
+    margin-right: 5px;
+  }
+  .date-inputs input {
+    margin-right: 10px;
   }
 
   .total-data {
