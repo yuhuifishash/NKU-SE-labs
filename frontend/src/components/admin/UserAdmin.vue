@@ -115,8 +115,8 @@ export default {
 .main {
   max-width: 80%;
   margin: 0 auto;
-  margin-top: 30px;
-  padding: 20px;
+  margin-top: 5px;
+  padding: 5px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
   display: flex;
   flex-direction: column;
