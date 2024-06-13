@@ -57,12 +57,13 @@ tokenhandler.parse = (req,res,next) => {
     if(req.headers.authorization == undefined) {
         return res.json({ status: 223, msg: "token无效" });
     }
+    
     const token = req.headers.authorization.split(" ")[1];
     jwt.verify(token, secretKey, function (err, decoded) {
         if (err) {
             return res.json({ status: 223, msg: "token无效" });
         }
-        console.log('verify success')
+        console.log('token parse success')
         return res.json({username: decoded.username,level: decoded.level,email: decoded.email})
     })
 }

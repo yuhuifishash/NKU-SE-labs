@@ -7,6 +7,7 @@ import UserAdmin from '@/components/admin/UserAdmin.vue'
 import DataAdmin from '@/components/admin/DataAdmin.vue'
 import Home from '@/components/user/Home.vue'
 import UserHome from '@/components/user/UserHome.vue'
+import Notice from '@/components/user/Notice.vue'
 
 import MainData from '@/components/function/MainData.vue'
 import UnderwaterSystem from '@/components//function/UnderwaterSystem.vue'
@@ -69,6 +70,11 @@ const routes = {
           path: 'intelligence-center',
           name: 'intelligence-center',
           component: IntelligenceCenter
+        },
+        {
+          path: 'notice',
+          name: 'notice',
+          component: Notice
         }
       ]
     }

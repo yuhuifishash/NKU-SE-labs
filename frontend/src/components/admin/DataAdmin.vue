@@ -1,8 +1,8 @@
 <template>
     <div class="main">
-      <p>DataAdminManagement</p>
+      <h2>数据管理中心</h2>
     </div>
-  </template>
+</template>
 
 <script>
 import axios from 'axios'
@@ -33,6 +33,10 @@ export default {
       }).catch(error => {
         console.error('Error fetching token:', error)
       })
+    },
+
+    GetNotice () {
+
     }
   }
 }
