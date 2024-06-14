@@ -8,6 +8,7 @@ import DataAdmin from '@/components/admin/DataAdmin.vue'
 import Home from '@/components/user/Home.vue'
 import UserHome from '@/components/user/UserHome.vue'
 import Notice from '@/components/user/Notice.vue'
+import NoticeSender from '@/components/user/NoticeSender.vue'
 
 import MainData from '@/components/function/MainData.vue'
 import UnderwaterSystem from '@/components//function/UnderwaterSystem.vue'
@@ -75,6 +76,11 @@ const routes = {
           path: 'notice',
           name: 'notice',
           component: Notice
+        },
+        {
+          path: 'notice_sender',
+          name: 'notice_sender',
+          component: NoticeSender
         }
       ]
     }

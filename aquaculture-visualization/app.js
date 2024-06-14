@@ -44,6 +44,9 @@ app.use('/fishcountdata_get',fishcountdata_get);
 var notice_receiver = require('./routes/user/notice_receiver');
 app.use('/notice_receiver',notice_receiver);
 
+var notice_sender = require('./routes/user/notice_sender');
+app.use('/notice_sender',notice_sender);
+
 const tokenhandler = require("./utils/token");
 app.use('/', tokenhandler.verify);
 app.use('/home/*', tokenhandler.verify);

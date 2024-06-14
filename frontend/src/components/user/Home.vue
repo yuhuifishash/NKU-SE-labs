@@ -21,7 +21,7 @@
         <el-menu-item @click.native="redirectTo('data-center')">数据中心</el-menu-item>
         <el-menu-item @click.native="redirectTo('intelligence-center')">智能中心</el-menu-item>
         <el-menu-item @click.native="redirectTo('notice')">查看通知</el-menu-item>
-        <el-menu-item @click.native="redirectTo('notice')">发送通知</el-menu-item>
+        <el-menu-item @click.native="redirectTo('notice_sender')">发送通知</el-menu-item>
         <el-menu-item v-if="isAdmin" @click.native="redirectTo('/home/datas')" type="warning">数据管理界面</el-menu-item>
         <el-menu-item v-if="isUserAdmin" @click.native="redirectTo('/home/admin')" type="warning">用户管理界面</el-menu-item>
       </div>
