@@ -1,15 +1,11 @@
 <template>
-    <div class="main">
-        <h1>发送通知</h1>
-        <h3 class="warn">
-            {{message}}
-        </h3>
-        <textarea class="noticereceiver" v-model="receiver" placeholder="请输入接收者的用户名"></textarea>
-        <br>
-        <textarea class="notice" v-model="text" placeholder="请输入通知内容"></textarea>
-        <br>
-        <button class="send" @click.prevent="SendNotice">发送消息</button>
-    </div>
+  <div class="main">
+    <h1 class="main-title">发送通知</h1>
+    <h3 class="warn">{{ message }}</h3>
+    <textarea class="noticereceiver" v-model="receiver" placeholder="请输入接收者的用户名"></textarea>
+    <textarea class="notice" v-model="text" placeholder="请输入通知内容"></textarea>
+    <button class="send" @click.prevent="SendNotice">发送消息</button>
+  </div>
 </template>
 
 <script>
@@ -59,61 +55,74 @@ export default {
 
 <style scoped>
 .main {
-  max-width: 80%;
-  margin: 0 auto;
-  margin-top: 5px;
-  padding: 5px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  border-radius: 10px;
 }
-.main-title, .admin-title {
-  font-size: 24px;
+
+.main-title {
+  font-size: 32px;
   text-align: center;
   margin-bottom: 20px;
+  color: #333;
 }
-.notice {
-    font-size:18px;
-    border-radius: 5px 5px 5px 5px;
-    width: 1000px;
-    height: 500px;
-    padding: 3px;
-    margin: 10px;
-    background-color: #fff;
-}
-.noticereceiver {
-    font-size:18px;
-    border-radius: 5px 5px 5px 5px;
-    width: 1000px;
-    height: 30px;
-    padding: 3px;
-    margin: 10px;
-    background-color: #fff;
-}
+
 .warn {
-    font-size:20px;
-    color:#ff0d01;
-    font-weight: bolder;
-    text-align: center;
+  font-size: 18px;
+  color: #ff4d4f;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 10px;
 }
-.send{
-    display: inline-block;
-    padding: 15px 25px;
-    font-size: 24px;
-    cursor: pointer;
-    text-align: center;
-    text-decoration: none;
-    outline: none;
-    color:#fff;
-    background-color: rgb(9, 168, 38);
-    border: none;
-    border-radius: 15px;
-    box-shadow: 0 9px #60abf1;
+
+.notice,
+.noticereceiver {
+  font-size: 16px;
+  border-radius: 5px;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+  box-sizing: border-box;
 }
-.send:hover{
-background-color: #1795bb;
+
+.notice {
+  height: 200px;
+  resize: none;
 }
-.send:active{
-    background-color: #1795bb;
-    box-shadow: 0 5px #60abf1;
-    transform:translateY(4px);
+
+.noticereceiver {
+  resize: none;
+}
+
+.send {
+  display: block;
+  width: 100%;
+  padding: 15px 0;
+  font-size: 18px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  color: #fff;
+  background-color: #52c41a;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0 4px #3da914;
+  transition: background-color 0.3s ease;
+}
+
+.send:hover {
+  background-color: #389e0d;
+}
+
+.send:active {
+  background-color: #52c41a;
+  box-shadow: 0 2px #3da914;
+  transform: translateY(2px);
 }
 </style>
