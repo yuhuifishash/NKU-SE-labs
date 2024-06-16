@@ -5,6 +5,13 @@
     <textarea class="noticereceiver" v-model="receiver" placeholder="请输入接收者的用户名"></textarea>
     <textarea class="notice" v-model="text" placeholder="请输入通知内容"></textarea>
     <button class="send" @click.prevent="SendNotice">发送消息</button>
+
+    <h2>历史消息发送记录</h2>
+    <div v-for="item in NoticeHistory" :key='item'>
+      <p>接收者:{{ item.Receiver }}</p>
+      <p>发送时间:{{ item.Time }}</p>
+      <p>发送内容:{{ item.Content }}</p>
+    </div>
   </div>
 </template>
 
@@ -18,7 +25,8 @@ export default {
       username: '',
       receiver: '',
       text: '',
-      message: ''
+      message: '',
+      NoticeHistory: []
     }
   },
   created () {
@@ -26,6 +34,7 @@ export default {
       headers: { Authorization: localStorage.getItem('token') }
     }).then(ret => {
       this.username = ret.data.username
+      this.GetNoticeHistory()
     })
   },
   methods: {
@@ -45,6 +54,18 @@ export default {
           this.$router.push('/home/notice_sender')
           alert('通知发送成功')
         }
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+    GetNoticeHistory () {
+      axios.post('http://localhost:3000/notice_history', {
+        params: {
+          username: this.username
+        }
+      }).then(res => {
+        this.NoticeHistory = res.data
+        console.log(res.data)
       }).catch(err => {
         console.log(err)
       })
