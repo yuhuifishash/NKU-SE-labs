@@ -47,6 +47,9 @@ app.use('/notice_receiver',notice_receiver);
 var notice_sender = require('./routes/user/notice_sender');
 app.use('/notice_sender',notice_sender);
 
+var notice_history = require('./routes/user/notice_history');
+app.use('/notice_history',notice_history); 
+
 const tokenhandler = require("./utils/token");
 app.use('/', tokenhandler.verify);
 app.use('/home/*', tokenhandler.verify);
