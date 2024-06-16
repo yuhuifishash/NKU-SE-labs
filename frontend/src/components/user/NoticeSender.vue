@@ -11,7 +11,7 @@
       {{ showHistory ? '隐藏历史消息' : '显示历史消息' }}
     </button>
     <div v-if="showHistory">
-      <div class="history-item" v-for="(item, index) in NoticeHistory" :key='item.id'>
+      <div class="history-item" v-for="(item) in NoticeHistory" :key='item.id'>
         <div class="photo">
           <span class="receiver-label">接收方:</span>
           <el-avatar :size='50' :style="`background:${extractColorByName(item.Receiver)}`">{{ item.Receiver }}</el-avatar>
@@ -74,7 +74,7 @@ export default {
           this.message = ''
           this.$router.push('/home/notice_sender')
           alert('通知发送成功')
-          this.GetNoticeHistory() 
+          this.GetNoticeHistory()
         }
       }).catch(err => {
         console.log(err)
