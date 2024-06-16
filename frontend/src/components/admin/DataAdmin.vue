@@ -4,7 +4,7 @@
       <div class="btndiv">
         <button class="btn" @click.prevent="SendNotice">下载鱼群种类数据</button>
         <button class="btn" @click.prevent="SendNotice">下载鱼群数量数据</button>
-        <button class="btn" @click.prevent="SendNotice">下载水质数据</button>
+        <button class="btn" @click.prevent="DownLoadAqua">下载水质数据</button>
       </div>
 
       <br><br><br><br>
@@ -53,17 +53,45 @@ export default {
           if (this.isAdmin === 0) {
             alert('您的权限不足')
             this.$router.push('/')
-          } else {
-
           }
         })
       }).catch(error => {
         console.error('Error fetching token:', error)
       })
     },
+    DownloadText (fileName, text) {
+      const url = window.URL || window.webkitURL || window
+      const blob = new Blob([text])
+      const saveLink = document.createElementNS('http://www.w3.org/1999/xhtml', 'a')
+      saveLink.href = url.createObjectURL(blob)
+      saveLink.download = fileName
+      saveLink.click()
+    },
+    DownLoadFile (type, url) {
+      axios.get('http://localhost:3000/data/download', {
+        params: {
+          url: url
+        }
+      }).then(res => {
+        this.DownloadText(type + '.csv', res.data)
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+    DownLoad (dtype) {
+      axios.post('http://localhost:3000/data', {
+        params: {
+          type: dtype
+        }
+      }).then(res => {
+        this.DownLoadFile(dtype, res.data.url)
+      }).catch(err => {
+        console.log(err)
+      })
+    },
 
-    GetNotice () {
-
+    DownLoadAqua () {
+      this.DownLoad('aquadata')
     }
   }
 }
