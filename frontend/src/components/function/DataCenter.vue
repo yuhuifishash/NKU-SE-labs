@@ -4,81 +4,13 @@
       <h1>数据中心</h1>
     </header>
     <section class="mainbox">
-      <!-- 数据总量 硬件信息统计 数据中心分布 数据类型统计 -->
-      <div class="column">
-        <!-- 数据总量 硬件信息统计 数据中心分布 -->
-        <div class="inline-row">
-          <!-- 数据总量 硬件信息统计 -->
-          <div class="inline-column">
-            <div class="total-data block">
-              <h3>数据总量</h3>
-              <div class="total-data-b">
-                <div class="total-data-b1">
-                  <p>1000</p>
-                </div>
-                <div class="total-data-b2">
-                  <p>今日新增</p>
-                  <p>8</p>
-                </div>
-                <div class="total-data-b3">
-                  <p>今日处理</p>
-                  <p>8</p>
-                </div>
-              </div>
-            </div>
-            <div class="hw-info block">
-              <div class="hw-info-row1">
-                <div class="total-process">
-                  <h3>进程总量</h3>
-                  <div class="total-process-num">
-                    1024
-                  </div>
-                </div>
-                <div class="disk">
-                  <h3>磁盘</h3>
-                  <div id="disk-chart"></div>
-                </div>
-              </div>
-              <div class="hw-info-row2">
-                <div id="cpu-chart"></div>
-                <div id="mem-chart"></div>
-                <div id="gpu-chart"></div>
-              </div>
-            </div>
-          </div>
-          <!-- 数据中心分布 -->
-          <div class="center-distri">
-            数据中心分布
-          </div>
-        </div>
-        <!-- 数据类型统计 -->
-        <div class="inline-row block">
-          <div class="col1">
-            数据类型统计1
-          </div>
-          <div class="col2">
-            数据类型统计2
-          </div>
-          <div class="col3">
-            数据类型统计3
-          </div>
+      <!--地图能点-->
+      <div class="column block">
+        <div id="cnmap" style="width: 100%; height: 100%;margin:0 auto">
         </div>
       </div>
       <!-- 传感器信息 数据库交互设计 -->
       <div class="column block">
-        <div class="row1">
-          <div class="trans-time">
-            <p>平均传输时长</p>
-            <p>02:45</p>
-          </div>
-          <div class="proce-time">
-            <p>平均处理时长</p>
-            <p>00:02</p>
-          </div>
-        </div>
-        <div class="row2">
-          传感器信息2
-        </div>
         <div class="row3" style="padding: 0px 10px;">
           数据库交互设计
           <!-- 开始 -->
@@ -111,6 +43,7 @@
 <script>
 import * as echarts from 'echarts'
 import axios from 'axios'
+import china from '@/assets/china.json'
 
 export default {
   name: 'DataCenter',
@@ -138,6 +71,56 @@ export default {
   },
   // 组件的其他代码...
   mounted () {
+    var charts = echarts.init(document.getElementById('cnmap'))
+    var option = {
+      backgroundColor: '#0E2152', // 背景颜色
+      geo: { // 地图配置
+        map: 'china',
+        label: { // 图形上的文本标签
+          normal: {// 通常状态下的样式
+            show: true,
+            textStyle: {
+              color: '#fff'
+            }
+          },
+          emphasis: {// 鼠标放上去高亮的样式
+            textStyle: {
+              color: '#fff'
+            }
+          }
+        },
+        itemStyle: {// 地图区域的样式设置
+          normal: { // 通常状态下的样式
+            borderColor: '#5089EC',
+            borderWidth: 1,
+            areaColor: { // 地图区域的颜色
+              type: 'radial', // 径向渐变
+              x: 0.5, // 圆心
+              y: 0.5, // 圆心
+              r: 0.8, // 半径
+              colorStops: [
+                { // 0% 处的颜色
+                  offset: 0,
+                  color: 'rgba(0, 102, 154, 0)'
+                },
+                { // 100% 处的颜色
+                  offset: 1,
+                  color: 'rgba(0, 102, 154, .4)'
+                }
+              ]
+            }
+          },
+          // 鼠标放上去高亮的样式
+          emphasis: {
+            areaColor: '#2386AD',
+            borderWidth: 0
+          }
+        }
+      }
+    }
+    // 地图注册，第一个参数的名字必须和option.geo.map一致
+    echarts.registerMap('china', china)
+    charts.setOption(option)
     var diskChart = echarts.init(document.getElementById('disk-chart'))
     var cpuChart = echarts.init(document.getElementById('cpu-chart'))
     var memChart = echarts.init(document.getElementById('mem-chart'))
@@ -478,7 +461,7 @@ header h1 {
 }
 
 .mainbox .column:nth-child(2) .row3 {
-  height: 30%;
+  height: 100%;
 }
 
 #disk-chart {
