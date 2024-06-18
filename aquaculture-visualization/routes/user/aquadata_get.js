@@ -9,9 +9,10 @@ router.post('/', async function (req, res, next) {
         return res.status(400).json({ message: 'Province is required' });
     }
     console.log('before sql');
-    const sqlQuery = 'SELECT * FROM aquadata WHERE province = ?';
+    const sqlQuery = 'SELECT * FROM aquadata WHERE province LIKE ?';
     console.log('before query');
-    result = await db.query(sqlQuery, [province])
+    console.log(sqlQuery);
+    result = await db.query(sqlQuery, ['%'.concat(province).concat('%')])
     res.json(result);
     
     // db.query(sqlQuery, [province], (err, results) => {
