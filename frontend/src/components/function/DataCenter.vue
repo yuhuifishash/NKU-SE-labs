@@ -20,7 +20,7 @@
             </div>
             <div style="height: 92%; overflow-y: scroll; transition: opacity 0.5s ease-in-out">
               <div v-for="(rivername, index) in riverlist" :key="index">
-                <button class="border-button" style="width: 100%">{{rivername}}</button>
+                <button @click="selectRiver(rivername)" class="border-button" style="width: 100%">{{rivername}}</button>
               </div>
             </div>
             <div style="height: 4%">
@@ -28,11 +28,31 @@
             </div>
           </div>
           <div style="height: 100%; flex: 80;margin-right: 0;">
-            <div style="height: 4%;">
-              选择时间
+            <div style="height: 4%; width: 100%; display: flex;">
+              <div style="height: 100%; flex:1">
+                选择指标
+              </div>
+              <select v-model="selectedIndex" @change="updateChart" style="height: 100%; flex:1">
+                <option v-for="(aqidx, index) in aquaIndexes" :key="index">
+                  {{ aqidx.name }}
+                </option>
+              </select>
+              <div style="height: 100%; flex:1">
+                开始日期
+              </div>
+              <input type="date" v-model="startDate" @change="updateChart" value="1987-01-01" style="flex: 1;" />
+              <div style="height: 100%; flex:1">
+                结束日期
+              </div>
+              <input type="date" v-model="endDate" @change="updateChart" value="2022-01-01" style="flex: 1;"/>
             </div>
-            <div style="height: 92%;">
-
+            <div style="height: 94.9%; width: 100%; margin-left: 10px; margin-top: 1%;">
+              <div id="aquachart" class="block-border" style="width: 100%; height: 100%;margin:0 auto">
+                <div style="vertical-align: center;">
+                  <!-- 加载中：{{load.toFixed(4)}}% -->
+                  选择河流来查看数据变化趋势!
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -85,6 +105,25 @@ export default {
       allresults: [],
       state: 0, // 0:Map, 1:ChooseRiver, 2:ShowGraph
       riverlist: [],
+      rivername: '',
+      aquachart: undefined,
+      aquaIndexes: [
+        {name: '温度', colName: 'temperature'},
+        {name: 'pH', colName: 'pH'},
+        {name: '溶解氧', colName: 'oxygen'},
+        {name: '导电性', colName: 'conductivity'},
+        {name: '浊度', colName: 'turbidity_ntu'},
+        {name: '高锰酸盐指数', colName: 'permanganate_index'},
+        {name: '氨氮', colName: 'ammonia_nitrogen'},
+        {name: '总磷', colName: 'total_phosphate'},
+        {name: '总氮', colName: 'total_nitrogen'},
+        {name: '叶绿素a', colName: 'chl_a'},
+        {name: '藻密度', colName: 'algae_density'},
+        {name: '水质类别', colName: 'quality_type'}
+      ],
+      selectedIndex: '温度',
+      startDate: '1987-01-01',
+      endDate: '2022-01-01',
       load: 0
     }
   },
@@ -214,6 +253,182 @@ export default {
         this.setMap()
       }, 1000)
     },
+    selectRiver (rivername) {
+      this.rivername = rivername
+      this.updateChart()
+    },
+    name2Index (name) {
+      for (var i = 0; i < this.aquaIndexes.length; i++) {
+        if (this.aquaIndexes[i].name === name) {
+          return i
+        }
+      }
+      return -1
+    },
+    updateChart () {
+      var index = this.name2Index(this.selectedIndex)
+      if (index === -1) {
+        alert('请选择一个指标')
+        return
+      }
+      if (this.startDate === '') {
+        alert('请选择开始时间')
+        return
+      }
+      if (this.endDate === '') {
+        alert('请选择结束时间')
+        return
+      }
+      if (this.rivername === '') {
+        alert('请选择河流')
+        return
+      }
+      var showdata = []
+      for (var i = 0; i < this.results.length; i++) {
+        if (this.results[i].river_section === this.rivername) {
+          if (this.results[i].time >= this.startDate && this.results[i].time <= this.endDate) {
+            let dataval = this.results[i][this.aquaIndexes[index].colName]
+            if (this.aquaIndexes[index].colName === 'quality_type') {
+              dataval = this.results[i].quality_type
+              console.log(this.results[i].quality_type)
+              console.log(dataval)
+            }
+            if (dataval === 'Ⅰ') {
+              dataval = 6
+            } else if (dataval === 'Ⅱ') {
+              dataval = 5
+            } else if (dataval === 'Ⅲ') {
+              dataval = 4
+            } else if (dataval === 'Ⅳ') {
+              dataval = 3
+            } else if (dataval === 'Ⅴ') {
+              dataval = 2
+            } else if (dataval === '劣Ⅴ') {
+              dataval = 1
+            }
+            if ((!isNaN(dataval) && dataval !== '-' && !(dataval === null)) || (dataval === 'Ⅰ') || (dataval === 'Ⅱ') || (dataval === 'Ⅲ') || (dataval === 'Ⅳ') || (dataval === 'Ⅴ') || (dataval === '劣Ⅴ')) {
+              showdata.push({time: this.results[i].time, data: dataval})
+            }
+          }
+        }
+      }
+      console.log(showdata)
+      this.aquachart = echarts.init(document.getElementById('aquachart'))
+      if (showdata.length === 0) {
+        alert('没有数据')
+        this.aquachart.clear()
+        return
+      }
+      var option = {
+        title: {
+          text: '水质数据变化图',
+          left: '1%'
+        },
+        tooltip: {
+          trigger: 'axis',
+          formatter: '{b0}<br/>{a0}:{c0}'
+        },
+        grid: {
+          left: '5%',
+          right: '15%',
+          bottom: '10%'
+        },
+        xAxis: {
+          data: showdata.map(function (item) {
+            return item.time
+          })
+        },
+        yAxis: {
+          type: 'value',
+          min: null,
+          max: null,
+          axisLabel: {
+            formatter: function (value) {
+              return value
+            }
+          },
+          axisPointer: {
+            label: {
+              formatter: function (value) {
+                return value
+              }
+            }
+          }
+        },
+        toolbox: {
+          right: 10,
+          feature: {
+            dataZoom: {
+              yAxisIndex: 'none'
+            },
+            restore: {},
+            saveAsImage: {}
+          }
+        },
+        dataZoom: [
+          {
+            type: 'inside'
+          }
+        ],
+        series: {
+          name: this.selectedIndex,
+          type: 'line',
+          data: showdata.map(function (item) {
+            return item.data
+          })
+        },
+        visualMap: {
+          show: false,
+          type: 'continuous'
+        }
+      }
+      if (this.aquaIndexes[index].colName === 'quality_type') {
+        option.yAxis = {
+          // type: 'category',
+          // data: [{value: '劣Ⅴ'}, {value: 'Ⅴ'}, {value: 'Ⅳ'}, {value: 'Ⅲ'}, {value: 'Ⅱ'}, {value: 'Ⅰ'}]
+          // data: [1, 2, 3, 4, 5, 6],
+          min: 1,
+          max: 6,
+          axisLabel: {
+            formatter: function (value) {
+              if (value === 1) {
+                return '劣Ⅴ'
+              } else if (value === 2) {
+                return 'Ⅴ'
+              } else if (value === 3) {
+                return 'Ⅳ'
+              } else if (value === 4) {
+                return 'Ⅲ'
+              } else if (value === 5) {
+                return 'Ⅱ'
+              } else if (value === 6) {
+                return 'Ⅰ'
+              }
+            }
+          }
+        }
+        option.tooltip = {
+          formatter: function (params) {
+            var value = params[0].value
+            var ret = params[0].axisValue + '<br/>水质:'
+            if (value === 1) {
+              return ret + '劣Ⅴ'
+            } else if (value === 2) {
+              return ret + 'Ⅴ'
+            } else if (value === 3) {
+              return ret + 'Ⅳ'
+            } else if (value === 4) {
+              return ret + 'Ⅲ'
+            } else if (value === 5) {
+              return ret + 'Ⅱ'
+            } else if (value === 6) {
+              return ret + 'Ⅰ'
+            }
+          }
+        }
+      }
+      this.aquachart.setOption(option)
+    },
     async searchData () {
       try {
         const response = await axios.post('http://localhost:3000/aquadata_get', {
@@ -239,10 +454,10 @@ export default {
             province: item.properties.name
           })
           var cnt = [0, 0, 0, 0, 0, 0]
-          var typename = ['I', 'Ⅱ', 'Ⅲ', 'Ⅳ', 'Ⅴ', '劣Ⅴ']
+          var typename = ['Ⅰ', 'Ⅱ', 'Ⅲ', 'Ⅳ', 'Ⅴ', '劣Ⅴ']
           this.allresults.push({name: item.properties.name, data: response.data})
           for (var i = 0; i < response.data.length; i++) {
-            if (response.data[i].quality_type === 'I') {
+            if (response.data[i].quality_type === 'Ⅰ') {
               cnt[0]++
             } else if (response.data[i].quality_type === 'Ⅱ') {
               cnt[1]++
@@ -269,6 +484,7 @@ export default {
           } else {
             this.mapshowdata.push({name: item.properties.name, value: [0, '数据不足']})
           }
+          this.load += 1 / china.features.length
         }
       } catch (error) {
         console.log('Error fetching data:', error)
@@ -283,8 +499,6 @@ export default {
     setInterval(() => {
       if (this.load < 99) {
         this.load += 1 // 每次调用增加1
-      } else if (this.load < 99.999) {
-        this.load += 0.001
       }
     }, 10)
     await this.GetProvinceCnt()
