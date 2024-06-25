@@ -2,7 +2,7 @@
   <div class="main">
     <el-row type="flex" justify="center" class="header-row">
       <el-col :span="24">
-        <h2 class="main-title">User and Admin Management</h2>
+        <h2 class="main-title">用户管理中心</h2>
       </el-col>
     </el-row>
 
@@ -13,12 +13,12 @@
     >
       <el-table-column
         prop="user_name"
-        label="Name"
+        label="用户名"
         >
       </el-table-column>
       <el-table-column
         prop="user_level"
-        label="Is Admin"
+        label="是否为管理员"
         >
         <template slot-scope="scope">
           <el-switch
@@ -115,8 +115,8 @@ export default {
 .main {
   max-width: 80%;
   margin: 0 auto;
-  margin-top: 30px;
-  padding: 20px;
+  margin-top: 5px;
+  padding: 5px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
   display: flex;
   flex-direction: column;

@@ -29,7 +29,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-
 var loginRouter = require('./routes/user/login');
 var registerRouter = require('./routes/user/register');
 var aquadata_get = require('./routes/user/aquadata_get');
@@ -42,6 +41,15 @@ app.use('/aquadata_get', aquadata_get);
 app.use('/fishdata_get',fishdata_get);
 app.use('/fishcountdata_get',fishcountdata_get);
 
+var notice_receiver = require('./routes/user/notice_receiver');
+app.use('/notice_receiver',notice_receiver);
+
+var notice_sender = require('./routes/user/notice_sender');
+app.use('/notice_sender',notice_sender);
+
+var notice_history = require('./routes/user/notice_history');
+app.use('/notice_history',notice_history); 
+
 const tokenhandler = require("./utils/token");
 app.use('/', tokenhandler.verify);
 app.use('/home/*', tokenhandler.verify);
@@ -49,6 +57,7 @@ app.use('/token',tokenhandler.parse);
 
 var admin = require('./routes/admin/admin');
 app.use('/admin',admin);
+
 
 var dataAdmin = require('./routes/admin/data');
 app.use('/data',dataAdmin);
