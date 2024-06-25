@@ -63,33 +63,12 @@
             <img src="~@/assets/云台摄像机.jpg" alt="">
           </div>
         </div>
-        <div class="form-container">
-          <input type="date" v-model="startDate" placeholder="开始日期" />
-          <input type="date" v-model="endDate" placeholder="结束日期" />
-          <button @click="searchData">查询</button>
-        </div>
-        <div>
-          <div v-if="results.length" class="highlighted-results">
-            <h3>查询结果</h3>
-            <ul>
-              <li v-for="result in results" :key="result.date">
-                日期: {{ result.date }}, 鱼种: {{ result.common_name }}, 数量: {{ result.count }}, 最小长度: {{ result.len_min }}, 最大长度: {{ result.len_max }}, 总重量: {{ result.weigh_total }}
-              </li>
-            </ul>
-          </div>
-        </div>
 
       </div>
-      <!-- 水文气象 海洋牧场位置显示 -->
+
       <div class="column">
-        <div class="row1 block">
+        <!-- <div class="row1 block">
           <h2>水文气象</h2>
-          <!-- <p>电池电压（V）<span>0.00</span></p>
-          <p>盐度（‰）<span>0.00</span></p>
-          <p>溶解氧（mg/L）<span>0.00</span></p>
-          <p>浊度（NTU）<span>0.00</span></p>
-          <p>pH  <span>0.00</span></p>
-          <p>水温（℃）<span>0.00</span></p> -->
           <div id="vol-chart"></div>
           <div id="salt-chart"></div>
           <div id="oxy-chart"></div>
@@ -100,20 +79,59 @@
         <div class="row2 block">
           <h2>定位</h2>
           <img src="../../../../maindata_location.png" alt="定位图" style="width: 100%; height: auto;">
+        </div> -->
+
+        <div class="form-container">
+          <el-form :inline="true" class="demo-form-inline">
+            <el-form-item label="开始日期">
+              <el-date-picker
+                v-model="startDate"
+                type="date"
+                placeholder="选择开始日期"
+                style="width: 100%;"
+              ></el-date-picker>
+            </el-form-item>
+            <el-form-item label="结束日期">
+              <el-date-picker
+                v-model="endDate"
+                type="date"
+                placeholder="选择结束日期"
+                style="width: 100%;"
+              ></el-date-picker>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="searchData">查询</el-button>
+            </el-form-item>
+          </el-form>
         </div>
+
+        <div v-if="results.length" class="highlighted-results">
+          <el-card class="box-card">
+            <div slot="header" class="clearfix">
+              <span>查询结果</span>
+            </div>
+            <el-table :data="results">
+              <el-table-column prop="common_name" label="鱼种"></el-table-column>
+              <el-table-column prop="count" label="数量"></el-table-column>
+              <el-table-column prop="len_min" label="最小长度"></el-table-column>
+              <el-table-column prop="len_max" label="最大长度"></el-table-column>
+            </el-table>
+          </el-card>
+        </div>
+
       </div>
       <!-- 历史记录 设备状态 -->
       <div class="column">
         <div class="history block">
           <h2>历史记录</h2>
-          <p>统计时间：
+          <!-- <p>统计时间：
             <input type="date" name="date" id="date" value="" />
             <input type="time" name="date" id="time" value="" />
             至
             <input type="date" name="date" id="date" value="" />
             <input type="time" name="date" id="time" value="" />
             <button>查询</button>
-          </p>
+          </p> -->
           <br>
           <ul class="guidebar">
             <li class="timescale">过去一天</li>
@@ -198,12 +216,12 @@ export default {
         console.log('查询成功')
         console.log('查询响应:', response.data)
         this.results = response.data
-        this.updateCharts()
       } catch (error) {
         console.log('reaching here')
         console.error('Error fetching data:', error)
         alert('查询出错，请查看控制台了解详情。')
       }
+      this.updateCharts()
     },
     updateCharts () {
     // 更新图表配置项和数据
@@ -235,292 +253,15 @@ export default {
   mounted () {
     this.generateRandomValues()
 
-    // 基于准备好的dom，初始化echarts实例
-    var volChart = echarts.init(document.getElementById('vol-chart'))
-    var saltChart = echarts.init(document.getElementById('salt-chart'))
-    var oxyChart = echarts.init(document.getElementById('oxy-chart'))
-    var turbChart = echarts.init(document.getElementById('turb-chart'))
-    var phChart = echarts.init(document.getElementById('ph-chart'))
-    var tempChart = echarts.init(document.getElementById('temp-chart'))
+    // var volChart = echarts.init(document.getElementById('vol-chart'))
+    // var saltChart = echarts.init(document.getElementById('salt-chart'))
+    // var oxyChart = echarts.init(document.getElementById('oxy-chart'))
+    // var turbChart = echarts.init(document.getElementById('turb-chart'))
+    // var phChart = echarts.init(document.getElementById('ph-chart'))
+    // var tempChart = echarts.init(document.getElementById('temp-chart'))
     var historyChart = echarts.init(document.getElementById('history-chart'))
 
     // 指定图表的配置项和数据
-    var optionVolChart = {
-      grid: {
-        left: '25%',
-        right: '10%',
-        bottom: '100%',
-        containLabel: false
-      },
-      xAxis: {
-        show: false,
-        max: 40
-      },
-      yAxis: {
-        type: 'category',
-        data: ['电池电压（V）'],
-        axisLine: {
-          show: false
-        },
-        axisTick: {
-          show: false
-        },
-        axisLabel: {
-          color: '#fff'
-        }
-      },
-      series: [
-        {
-          name: 'val',
-          type: 'bar',
-          data: [20],
-          itemStyle: {
-            barBorderRadius: 20,
-            color: '#90EE90'
-          },
-          barGategoryGap: 50,
-          barWidth: 15,
-          showBackground: true,
-          backgroundStyle: {
-            borderRadius: 10
-          },
-          label: {
-            show: true,
-            position: 'right'
-          }
-        }
-      ]
-    }
-    var optionSaltChart = {
-      grid: {
-        left: '25%',
-        right: '10%',
-        bottom: '100%',
-        containLabel: false
-      },
-      xAxis: {
-        show: false,
-        max: 1000
-      },
-      yAxis: {
-        type: 'category',
-        data: ['盐度（‰）'],
-        axisLine: {
-          show: false
-        },
-        axisTick: {
-          show: false
-        },
-        axisLabel: {
-          color: '#fff'
-        }
-      },
-      series: [
-        {
-          name: 'val',
-          type: 'bar',
-          data: [30],
-          itemStyle: {
-            barBorderRadius: 20,
-            color: '#90EE90'
-          },
-          barGategoryGap: 50,
-          barWidth: 15,
-          showBackground: true,
-          backgroundStyle: {
-            borderRadius: 10
-          },
-          label: {
-            show: true,
-            position: 'right'
-          }
-        }
-      ]
-    }
-    var optionOxyChart = {
-      grid: {
-        left: '25%',
-        right: '10%',
-        bottom: '100%',
-        containLabel: false
-      },
-      xAxis: {
-        show: false,
-        max: 100
-      },
-      yAxis: {
-        type: 'category',
-        data: ['溶解氧（mg/L）'],
-        axisLine: {
-          show: false
-        },
-        axisTick: {
-          show: false
-        },
-        axisLabel: {
-          color: '#fff'
-        }
-      },
-      series: [
-        {
-          name: 'val',
-          type: 'bar',
-          data: [0],
-          itemStyle: {
-            barBorderRadius: 20,
-            color: '#90EE90'
-          },
-          barGategoryGap: 50,
-          barWidth: 15,
-          showBackground: true,
-          backgroundStyle: {
-            borderRadius: 10
-          },
-          label: {
-            show: true,
-            position: 'right'
-          }
-        }
-      ]
-    }
-    var optionTurbChart = {
-      grid: {
-        left: '25%',
-        right: '10%',
-        bottom: '100%',
-        containLabel: false
-      },
-      xAxis: {
-        show: false,
-        max: 10
-      },
-      yAxis: {
-        type: 'category',
-        data: ['浊度（NTU）'],
-        axisLine: {
-          show: false
-        },
-        axisTick: {
-          show: false
-        },
-        axisLabel: {
-          color: '#fff'
-        }
-      },
-      series: [
-        {
-          name: 'val',
-          type: 'bar',
-          data: [2.03],
-          itemStyle: {
-            barBorderRadius: 20,
-            color: '#90EE90'
-          },
-          barGategoryGap: 50,
-          barWidth: 15,
-          showBackground: true,
-          backgroundStyle: {
-            borderRadius: 10
-          },
-          label: {
-            show: true,
-            position: 'right'
-          }
-        }
-      ]
-    }
-    var optionPhChart = {
-      grid: {
-        left: '25%',
-        right: '10%',
-        bottom: '100%',
-        containLabel: false
-      },
-      xAxis: {
-        show: false,
-        max: 14
-      },
-      yAxis: {
-        type: 'category',
-        data: ['pH'],
-        axisLine: {
-          show: false
-        },
-        axisTick: {
-          show: false
-        },
-        axisLabel: {
-          color: '#fff'
-        }
-      },
-      series: [
-        {
-          name: 'val',
-          type: 'bar',
-          data: [8.37],
-          itemStyle: {
-            barBorderRadius: 20,
-            color: '#90EE90'
-          },
-          barGategoryGap: 50,
-          barWidth: 15,
-          showBackground: true,
-          backgroundStyle: {
-            borderRadius: 10
-          },
-          label: {
-            show: true,
-            position: 'right'
-          }
-        }
-      ]
-    }
-    var optionTempChart = {
-      grid: {
-        left: '25%',
-        right: '10%',
-        bottom: '100%',
-        containLabel: false
-      },
-      xAxis: {
-        show: false,
-        max: 50
-      },
-      yAxis: {
-        type: 'category',
-        data: ['水温（℃）'],
-        axisLine: {
-          show: false
-        },
-        axisTick: {
-          show: false
-        },
-        axisLabel: {
-          color: '#fff'
-        }
-      },
-      series: [
-        {
-          name: 'val',
-          type: 'bar',
-          data: [15],
-          itemStyle: {
-            barBorderRadius: 20,
-            color: '#90EE90'
-          },
-          barGategoryGap: 50,
-          barWidth: 15,
-          showBackground: true,
-          backgroundStyle: {
-            borderRadius: 10
-          },
-          label: {
-            show: true,
-            position: 'right'
-          }
-        }
-      ]
-    }
     var optionHistoryChart = {
       grid: {
         left: '5%',
@@ -615,12 +356,12 @@ export default {
     }
 
     // 使用刚指定的配置项和数据显示图表。
-    volChart.setOption(optionVolChart)
-    saltChart.setOption(optionSaltChart)
-    oxyChart.setOption(optionOxyChart)
-    turbChart.setOption(optionTurbChart)
-    phChart.setOption(optionPhChart)
-    tempChart.setOption(optionTempChart)
+    // volChart.setOption(optionVolChart)
+    // saltChart.setOption(optionSaltChart)
+    // oxyChart.setOption(optionOxyChart)
+    // turbChart.setOption(optionTurbChart)
+    // phChart.setOption(optionPhChart)
+    // tempChart.setOption(optionTempChart)
     historyChart.setOption(optionHistoryChart)
 
     this.loadExternalScript('js/flexible.js')
@@ -838,27 +579,23 @@ export default {
   }
 
 .highlighted-results {
-  position: absolute;
-  bottom: 0px;
-  right: 10%;
-  max-height: 250px;
-  overflow-y: auto; /* 超出内容显示滚动条 */
-  background-color: #001529; /* 深蓝色背景 */
-  border: 2px solid #1890ff; /* 蓝色边框 */
-  border-radius: 10px; /* 圆角边框 */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 添加阴影 */
-  z-index: 1000; /* 确保它显示在其他内容之上 */
-  width: 300px;
-  color: #fff; /* 白色文字 */
+  max-height: 600px;
+  overflow-y: auto;
+  background-color: #001529;
+  border: 2px solid #1890ff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  color: #fff;
+  padding: 20px;
 }
 
 .form-container {
-  position: absolute;
-  bottom: 0px;
-  right: 0px;
-  background-color: #001529; /* 深蓝色背景 */
+  margin-bottom: 50px;
+  background-color: #001529;
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 添加阴影 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
 }
 
 .form-container input,

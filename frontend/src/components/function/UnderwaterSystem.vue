@@ -6,11 +6,28 @@
     <section class="mainbox">
       <!-- 鱼群数量 环境得分 历史数据 -->
       <div class="column">
-        <div class="fish-num block">
-          <h2>鱼群数量</h2>
-          <p>总量：<span>{{ fishTotal }}</span></p>
-          <p>今日新增：<span>{{ fishAddedToday }}</span></p>
-          <p>今日死亡：<span>{{ fishDiedToday }}</span></p>
+        <div class="block">
+          <el-form :inline="true" class="demo-form-inline">
+            <el-form-item>
+              <el-date-picker
+                v-model="startDate"
+                type="date"
+                placeholder="选择开始日期"
+                style="width: 100%;"
+              ></el-date-picker>
+            </el-form-item>
+            <el-form-item>
+              <el-date-picker
+                v-model="endDate"
+                type="date"
+                placeholder="选择结束日期"
+                style="width: 100%;"
+              ></el-date-picker>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="searchData(startDate, endDate)">查询</el-button>
+            </el-form-item>
+          </el-form>
         </div>
         <div class="envir-score block">
           <h2>海洋牧场环境感知得分</h2>
@@ -19,13 +36,6 @@
         <div class="history block">
           <h2>鱼群个体数量历史曲线</h2>
           <div id="history-chart"></div>
-          <div class="date-inputs">
-            <label for="startDate"></label>
-            <input type="date" id="startDate" v-model="startDate">
-            <label for="endDate"></label>
-            <input type="date" id="endDate" v-model="endDate">
-            <button @click="searchData(startDate, endDate)">查询</button>
-          </div>
         </div>
       </div>
       <!-- 总信息 鱼群属性分布 -->
@@ -54,29 +64,8 @@
                 </div>
               </div>
             </div>
-            <div class="total-data-show2" id="total-data-show2"></div>
-            <div class="total-data-show3">
-              <div class="show3-up">
-                <div class="data-block">
-                  <p>鱼种</p>
-                  <p>{{ fishSpeciesCount }}+</p>
-                </div>
-              </div>
-              <div class="show3-down">
-                <div class="show3-down1">
-                  <div class="data-block">
-                    <p>鱼苗</p>
-                    <p>{{ fishFryCount }}尾</p>
-                  </div>
-                </div>
-                <div class="show3-down2">
-                  <div class="data-block">
-                    <p>生长</p>
-                    <p>{{ growingFishCount }}尾</p>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <img class="total-data-show2" src="~@/assets/sea.jpeg">
+            <img class="total-data-show3" src="~@/assets/fish.jpeg">
           </div>
           <div class="total-data-number">
             <div class="data-block">
@@ -91,15 +80,15 @@
             <div class="attr-distri-chart">
               <div id="attr-distri-chart"></div>
             </div>
-            <div class="attr-distri-chose">
+            <!-- <div class="attr-distri-chose">
               <ul class="guidebar">
                 <li>鱼重量</li>
                 <li>鱼尺寸</li>
                 <li>鱼生命</li>
               </ul>
-            </div>
+            </div> -->
           </div>
-          <div class="attr-distri-down">
+          <!-- <div class="attr-distri-down">
             <ul class="guidebar2">
               <li>鱼类A</li>
               <li>鱼类B</li>
@@ -108,24 +97,37 @@
               <li>鱼类E</li>
               <li>鱼类F</li>
             </ul>
-          </div>
+          </div> -->
         </div>
       </div>
       <!-- 网箱信息 水底传感器 鱼群种类占比 -->
       <div class="column">
         <div class="net-data block">
-          <h2>网箱信息</h2>
-          <p>网箱长度：<span>{{ netLength }}</span>m</p>
-          <p>网箱宽度：<span>{{ netWidth }}</span>m</p>
-          <p>网箱深度：<span>{{ netDepth }}</span>m</p>
-          <p>网箱经度：<span>{{ netLongitude }}</span></p>
-          <p>网箱纬度：<span>{{ netLatitude }}</span></p>
+          <div class="total-data-show2" id="total-data-show2"></div>
         </div>
         <div class="sensor block">
-          <h2>水底传感器</h2>
-          <p>运行时间：<span>{{ sensorRuntime }}</span>h</p>
-          <p>下次检修：<span>{{ sensorNextCheck }}</span>天后</p>
-          <p>保修过期：<span>{{ sensorWarrantyExpired }}</span></p>
+          <div class="total-data-show3">
+            <div>
+              <div class="data-block">
+                <p>鱼种</p>
+                <p>{{ fishSpeciesCount }}+</p>
+              </div>
+            </div>
+            <div>
+              <div class="show3-down1">
+                <div class="data-block">
+                  <p>鱼苗</p>
+                  <p>{{ fishFryCount }}尾</p>
+                </div>
+              </div>
+              <div>
+                <div class="data-block">
+                  <p>生长</p>
+                  <p>{{ growingFishCount }}尾</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="type block">
           <h2>鱼群种类占比</h2>
@@ -365,7 +367,7 @@ export default {
         series: [
           {
             data: this.generateRandomData(7, 800, 1400),
-            type: 'line',
+            type: 'bar',
             smooth: true
           }
         ]
@@ -382,8 +384,9 @@ export default {
             radius: ['40%', '70%'],
             avoidLabelOverlap: false,
             label: {
-              show: false,
-              position: 'center'
+              show: true,
+              position: 'outside',
+              formatter: '{b}: {c}'
             },
             emphasis: {
               label: {
@@ -393,7 +396,7 @@ export default {
               }
             },
             labelLine: {
-              show: false
+              show: true
             },
             data: [
               { value: this.getRandomInt(500, 1500), name: '鲤鱼' },
@@ -607,7 +610,7 @@ export default {
       series: [
         {
           data: this.generateRandomData(7, 800, 1400),
-          type: 'line',
+          type: 'bar',
           smooth: true
         }
       ]
@@ -624,7 +627,7 @@ export default {
           radius: ['40%', '70%'],
           avoidLabelOverlap: false,
           label: {
-            show: false,
+            show: true,
             position: 'center'
           },
           emphasis: {
@@ -635,7 +638,7 @@ export default {
             }
           },
           labelLine: {
-            show: false
+            show: true
           },
           data: [
             { value: this.getRandomInt(500, 1500), name: '鲤鱼' },
@@ -709,10 +712,6 @@ export default {
   }
   .mainbox .column:nth-child(2) {
     flex: 9;
-  }
-
-  .fish-num {
-    height: 20%;
   }
   .envir-score {
     height: 40%;
@@ -879,5 +878,17 @@ export default {
   #type-chart {
     height: 100%;
     width: 100%;
+  }
+
+  .fish-num {
+    padding: 20px;
+    background-color: #f5f5f5;
+    border-radius: 10px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+  }
+
+  .demo-form-inline .el-form-item {
+    margin-right: 10px;
   }
 </style>
