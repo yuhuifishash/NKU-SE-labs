@@ -252,13 +252,6 @@ export default {
   // 组件的其他代码...
   mounted () {
     this.generateRandomValues()
-
-    // var volChart = echarts.init(document.getElementById('vol-chart'))
-    // var saltChart = echarts.init(document.getElementById('salt-chart'))
-    // var oxyChart = echarts.init(document.getElementById('oxy-chart'))
-    // var turbChart = echarts.init(document.getElementById('turb-chart'))
-    // var phChart = echarts.init(document.getElementById('ph-chart'))
-    // var tempChart = echarts.init(document.getElementById('temp-chart'))
     var historyChart = echarts.init(document.getElementById('history-chart'))
 
     // 指定图表的配置项和数据
