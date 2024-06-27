@@ -1,55 +1,57 @@
 <template>
-    <div class="main">
-      <h2>数据管理中心</h2>
-      <div class="btndiv">
-        <button class="btn" @click.prevent="DownLoadFishKind">下载鱼群种类数据</button>
-        <button class="btn" @click.prevent="DownLoadFish">下载鱼群数量数据</button>
-        <button class="btn" @click.prevent="DownLoadAqua">下载水质数据</button>
-      </div>
-
-      <br><br>
-      <div class="btndiv">
-        <button class="btn" @click.prevent="SubmitFishKind">上传鱼群种类数据</button>
-        <button class="btn" @click.prevent="SubmitFish">上传鱼群数量数据</button>
-        <button class="btn" @click.prevent="SubmitAqua">上传水质数据</button>
-      </div>
-      <br><br>
-      <div>
-        <input type='date' value="2020-06-01" v-model="fishkind_date" placeholder="请输入日期"/>
-        <input v-model="fishkind_type" placeholder="请输入鱼的种类"/>
-        <input type='number' v-model="fishkind_quantity" placeholder="请输入该种类鱼的数量"/>
-        <input type='number' v-model="fishkind_size" placeholder="请输入该种类鱼的平均长度"/>
-      </div>
-      <br><br>
-      <div>
-        <input type='date' value="2020-06-01" v-model="fish_date" placeholder="请输入日期"/>
-        <input v-model="fish_type" placeholder="请输入鱼的种类"/>
-        <input type='number' v-model="fish_number" placeholder="请输入该种类鱼的数量"/>
-        <input type='number' v-model="fish_lenmin" placeholder="请输入该种类鱼的长度最小值"/>
-        <input type='number' v-model="fish_lenmax" placeholder="请输入该种类鱼的长度最大值"/>
-        <input type='number' v-model="fish_weight" placeholder="请输入该种类鱼的重量"/>
-      </div>
-      <br><br>
-      <div>
-        <input v-model="aqua_province" placeholder="请输入省份"/>
-        <input v-model="aqua_drain" placeholder="请输入流域"/>
-        <input v-model="aqua_section" placeholder="请输入区域名"/>
-        <input type="datetime-local" v-model="aqua_time" placeholder="请输入时间"/>
-        <input v-model="aqua_type" placeholder="请输入水质等级"/>
-        <input v-model="aqua_temp" placeholder="请输入河水温度"/>
-        <input v-model="aqua_pH" placeholder="请输入河水pH值"/>
-        <input v-model="aqua_oxygen" placeholder="请输入河水溶氧量(mg/L)"/>
-        <input v-model="aqua_cond" placeholder="请输入河水电导率(μS/cm)"/>
-        <input v-model="aqua_tur" placeholder="请输入河水浑浊度(NTU)"/>
-        <input v-model="aqua_kmno" placeholder="请输入河水高锰酸盐指数(mg/L)"/>
-        <input v-model="aqua_nh3" placeholder="请输入河水氨氮(mg/L)"/>
-        <input v-model="aqua_k" placeholder="请输入河水总磷(mg/L)"/>
-        <input v-model="aqua_n" placeholder="请输入河水总氮(mg/L)"/>
-        <input v-model="aqua_chl" placeholder="请输入河水叶绿素(mg/L)"/>
-        <input v-model="aqua_algae" placeholder="请输入河水藻密度(cells/L)"/>
-        <input v-model="aqua_situation" placeholder="请输入站点情况"/>
-      </div>
+  <div class="main">
+    <h2>数据管理中心</h2>
+    <div class="btndiv">
+      <button class="btn" @click.prevent="DownLoadFishKind">下载鱼群种类数据</button>
+      <button class="btn" @click.prevent="DownLoadFish">下载鱼群数量数据</button>
+      <button class="btn" @click.prevent="DownLoadAqua">下载水质数据</button>
     </div>
+
+    <div class="btndiv">
+      <button class="btn" @click.prevent="SubmitFishKind">上传鱼群种类数据</button>
+      <button class="btn" @click.prevent="SubmitFish">上传鱼群数量数据</button>
+      <button class="btn" @click.prevent="SubmitAqua">上传水质数据</button>
+    </div>
+
+    <div class="form-section">
+      <h3>鱼群种类数据</h3>
+      <input type='date' v-model="fishkind_date" placeholder="请输入日期"/>
+      <input v-model="fishkind_type" placeholder="请输入鱼的种类"/>
+      <input type='number' v-model="fishkind_quantity" placeholder="请输入该种类鱼的数量"/>
+      <input type='number' v-model="fishkind_size" placeholder="请输入该种类鱼的平均长度"/>
+    </div>
+
+    <div class="form-section">
+      <h3>鱼群数量数据</h3>
+      <input type='date' v-model="fish_date" placeholder="请输入日期"/>
+      <input v-model="fish_type" placeholder="请输入鱼的种类"/>
+      <input type='number' v-model="fish_number" placeholder="请输入该种类鱼的数量"/>
+      <input type='number' v-model="fish_lenmin" placeholder="请输入该种类鱼的长度最小值"/>
+      <input type='number' v-model="fish_lenmax" placeholder="请输入该种类鱼的长度最大值"/>
+      <input type='number' v-model="fish_weight" placeholder="请输入该种类鱼的重量"/>
+    </div>
+
+    <div class="form-section">
+      <h3>水质数据</h3>
+      <input v-model="aqua_province" placeholder="请输入省份"/>
+      <input v-model="aqua_drain" placeholder="请输入流域"/>
+      <input v-model="aqua_section" placeholder="请输入区域名"/>
+      <input type="datetime-local" v-model="aqua_time" placeholder="请输入时间"/>
+      <input v-model="aqua_type" placeholder="请输入水质等级"/>
+      <input v-model="aqua_temp" placeholder="请输入河水温度"/>
+      <input v-model="aqua_pH" placeholder="请输入河水pH值"/>
+      <input v-model="aqua_oxygen" placeholder="请输入河水溶氧量(mg/L)"/>
+      <input v-model="aqua_cond" placeholder="请输入河水电导率(μS/cm)"/>
+      <input v-model="aqua_tur" placeholder="请输入河水浑浊度(NTU)"/>
+      <input v-model="aqua_kmno" placeholder="请输入河水高锰酸盐指数(mg/L)"/>
+      <input v-model="aqua_nh3" placeholder="请输入河水氨氮(mg/L)"/>
+      <input v-model="aqua_k" placeholder="请输入河水总磷(mg/L)"/>
+      <input v-model="aqua_n" placeholder="请输入河水总氮(mg/L)"/>
+      <input v-model="aqua_chl" placeholder="请输入河水叶绿素(mg/L)"/>
+      <input v-model="aqua_algae" placeholder="请输入河水藻密度(cells/L)"/>
+      <input v-model="aqua_situation" placeholder="请输入站点情况"/>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -232,58 +234,70 @@ export default {
 }
 </script>
 
-  <style scoped>
-  .main {
-    max-width: 80%;
-    margin: 0 auto;
-    margin-top: 5px;
-    padding: 5px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  }
-  .main-title, .admin-title {
-    font-size: 24px;
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  .filereq {
-    border-radius: 50px 50px 50px 50px;
-    padding: 3px;
-    margin: 10px;
-    height: 300px;
-    background-color: #fff;
-  }
-  .reqtext {
-      font-size:20px
-  }
-  .btndiv {
-    max-width: 80%;
-    margin: 0 auto;
-    margin-top: 5px;
-    padding: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-  }
-  .btn{
-    display: inline-block;
-    padding: 15px 25px;
-    font-size: 24px;
-    cursor: pointer;
-    text-align: center;
-    text-decoration: none;
-    outline: none;
-    color:#fff;
-    background-color: rgb(9, 168, 38);
-    border: none;
-    border-radius: 15px;
-    box-shadow: 0 9px #60abf1;
+<style scoped>
+.main {
+  max-width: 80%;
+  margin: 20px auto;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #f9f9f9;
+  border-radius: 10px;
 }
-.btn:hover{
-background-color: #1795bb;
+
+h2 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 30px;
 }
-.btn:active{
-    background-color: #1795bb;
-    box-shadow: 0 5px #60abf1;
-    transform:translateY(4px);
+
+.btndiv {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+
+.btn {
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  text-align: center;
+  color: #fff;
+  background-color: #42b983;
+  border: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+  background-color: #38a170;
+}
+
+.form-section {
+  margin-bottom: 30px;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+h3 {
+  margin-bottom: 15px;
+  color: #666;
+}
+
+input {
+  display: block;
+  width: calc(100% - 20px);
+  margin: 10px auto;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+input::placeholder {
+  color: #bbb;
 }
 </style>
